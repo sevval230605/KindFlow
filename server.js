@@ -1,21 +1,21 @@
 
 // Express.js kütüphanesini projeye dahil ediyoruz.
 const express = require("express");
+
 // Veritabanı bağlantısını uygulama başlarken yükler.
 const db = require("./database/database");
-// Görev-gönüllü atama rotalarını içe aktarıyoruz.
-const assignmentRoutes = require("./routes/assignmentRoutes");
+
+// Görev rotalarını içe aktarıyoruz.
+const taskRoutes = require("./routes/taskRoutes");
 
 // Gönüllü rotalarını içe aktarıyoruz.
 const volunteerRoutes = require("./routes/volunteerRoutes");
 
-// Logger Middleware dosyamızı içe aktarıyoruz.
-// Gelen API isteklerini terminale kaydeder.
-const logger = require("./middleware/logger");
+// Görev-gönüllü atama rotalarını içe aktarıyoruz.
+const assignmentRoutes = require("./routes/assignmentRoutes");
 
-// Görev rotalarını içe aktarıyoruz.
-// Görev oluşturma, listeleme, güncelleme ve silme adreslerini içerir.
-const taskRoutes = require("./routes/taskRoutes");
+// Logger Middleware dosyamızı içe aktarıyoruz.
+const logger = require("./middleware/logger");
 
 // Express uygulamasını oluşturuyoruz.
 const app = express();
@@ -23,16 +23,10 @@ const app = express();
 // KindFlow API sunucusunun çalışacağı port numarası.
 const PORT = 3000;
 
-// İsteklerin JSON formatındaki verilerini okuyabilmemizi sağlar.
+// JSON formatındaki istek verilerini okuyabilmemizi sağlar.
 app.use(express.json());
 
-// Atama işlemlerini /api/assignments adresine bağlıyoruz.
-app.use("/api/assignments", assignmentRoutes);
-
-// Gönüllü işlemlerini /api/volunteers adresine bağlıyoruz.
-app.use("/api/volunteers", volunteerRoutes);
-
-// Gelen bütün istekleri Logger Middleware üzerinden geçirir.
+// TÜM istekleri rotalara ulaşmadan önce Logger üzerinden geçiriyoruz.
 app.use(logger);
 
 // Ana adres kontrolü.
@@ -43,9 +37,14 @@ app.get("/", (req, res) => {
     });
 });
 
-// Görev rotalarını /api/tasks adresine bağlıyoruz.
-// Örneğin GET /api/tasks tüm görevleri listeler.
+// Görev işlemlerini /api/tasks adresine bağlıyoruz.
 app.use("/api/tasks", taskRoutes);
+
+// Gönüllü işlemlerini /api/volunteers adresine bağlıyoruz.
+app.use("/api/volunteers", volunteerRoutes);
+
+// Atama işlemlerini /api/assignments adresine bağlıyoruz.
+app.use("/api/assignments", assignmentRoutes);
 
 // Sunucuyu başlatıyoruz.
 app.listen(PORT, () => {

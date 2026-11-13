@@ -50,7 +50,7 @@ KindFlow/
 │   └── assignment.js
 ├── database/
 │   ├── database.js
-│   └── kindflow.db
+│  
 ├── middleware/
 │   └── logger.js
 ├── server.js
